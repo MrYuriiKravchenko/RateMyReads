@@ -1,0 +1,11 @@
+.env
+myvenv/
+__pycache__/
+.env.prod
+docker-compose.prod.yml
+Dockerfile.prod
+.idea/
+.vscode/
+*.pyc
+*.pyo
+
