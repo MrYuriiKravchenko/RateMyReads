@@ -27,7 +27,10 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')=='True'
 
-ALLOWED_HOSTS = str(os.getenv('DJANGO_ALLOWED_HOSTS')).split(' ')
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
+DJANGO_ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
+
+
 
 
 # Application definition
@@ -39,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
@@ -48,9 +52,7 @@ INSTALLED_APPS = [
     'users',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8080',
-]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -88,13 +90,13 @@ WSGI_APPLICATION = 'ratemyreads.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": str(os.getenv("SQL_ENGINE")),
-        "NAME": str(os.getenv("SQL_DATABASE")),
-        "USER": str(os.getenv("SQL_USER")),
-        "PASSWORD": str(os.getenv("SQL_PASSWORD")),
-        "HOST": str(os.getenv("SQL_HOST")),
-        "PORT": str(os.getenv("SQL_PORT")),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': os.getenv('DATABASE_PORT'),
     }
 }
 
@@ -144,7 +146,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DATETIME_FORMAT': '%d.%m.%Y %H:%M',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
@@ -154,3 +155,7 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'users.User'
+
+REST_FRAMEWORK = {
+    'SEARCH_PARAM': 'q'
+}
