@@ -8,8 +8,8 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ['created', 'user']
 
 class RatingAdmin(admin.ModelAdmin):
-    list_display = ['book', 'user', 'score']
-    list_filter = ['score', 'user']
+    list_display = ['book', 'user', 'rating']
+    list_filter = ['rating', 'user']
 
 
 class CommentInLine(admin.TabularInline):
@@ -20,8 +20,8 @@ class RatingInLine(admin.TabularInline):
     model = Rating
     extra = 0
 
-class GenreInline(admin.StackedInline):  
-    model = Book.genre.through
+class GenreInline(admin.StackedInline): 
+    model = Book.genre.through 
     extra = 1 # Количество пустых форм для добавления новых объектов
 
 

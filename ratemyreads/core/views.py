@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .serializers import BookSerializer, GenreSerializer, CommentSerializer
-from .models import Book, Genre, Comment
+from .serializers import BookSerializer, GenreSerializer, CommentSerializer, RatingSerializer
+from .models import Book, Genre, Comment, Rating
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import pagination
@@ -21,7 +21,7 @@ class BookViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny] 
     pagination_class = PageNumberSetPagination
 
-class GenreReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet):
+class GenreViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = GenreSerializer
     queryset = Genre.objects.all()
     permission_classes = [permissions.AllowAny]
@@ -35,3 +35,15 @@ class CommentView(generics.ListCreateAPIView):
         book_slug = self.kwargs['book_slug'].lower()
         book = Book.objects.get(slug=book_slug)
         return Comment.objects.filter(book=book)
+
+class RatingViewSet(viewsets.ModelViewSet):
+    serializer_class = RatingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Rating.objects.filter(book_slug = self.kwargs['book_pk'])
+    
+    def get_serializer_context(self):
+        user_id = self.request.user.id 
+        book_slug = self.kwargs['book_slug']
+        return {'user_id': user_id, 'book_slug': book_slug}

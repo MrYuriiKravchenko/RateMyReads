@@ -8,7 +8,6 @@ class Genre(models.Model):
     class Meta:
         indexes= [
             models.Index(fields=['name']),
-            models.Index(fields=['id']),
         ]
 
     def __str__(self):
@@ -39,6 +38,7 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        unique_together = ('user', 'book')
         ordering = ['-created']
         indexes = [
             models.Index(fields=['book']),
@@ -50,17 +50,17 @@ class Comment(models.Model):
         return f'{self.user} - {self.book} - {self.text[:20]}'
     
 class Rating(models.Model):
-    book = models.ForeignKey(Book, related_name='ratings', on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, related_name='rating', on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='user_ratings', on_delete=models.CASCADE)
-    score = models.PositiveSmallIntegerField()
+    rating = models.PositiveIntegerField(choices=((1, '1 star'), (2, '2 stars'), (3, '3 stars'), (4, '4 stars'), (5, '5 stars')))
 
     class Meta:
+        unique_together = ('book', 'user')
         indexes = [
             models.Index(fields=['book']),
             models.Index(fields=['user']),
-            models.Index(fields=['score']),
         ]
     
     def __str__(self):
-        return f'{self.user} - {self.book} - {self.score}'
+        return f"{self.user}'s {self.rating}-star rating for {self.product}"
     

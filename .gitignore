@@ -8,4 +8,4 @@ Dockerfile.prod
 .vscode/
 *.pyc
 *.pyo
-
+.pylintrc
