@@ -27,7 +27,6 @@ class GenreViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 class CommentView(generics.ListCreateAPIView):
-    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -35,15 +34,18 @@ class CommentView(generics.ListCreateAPIView):
         book_slug = self.kwargs['book_slug'].lower()
         book = Book.objects.get(slug=book_slug)
         return Comment.objects.filter(book=book)
+    
+    def perform_create(self, serializer):
+        serializer.save(username=self.request.user)
 
 class RatingViewSet(viewsets.ModelViewSet):
     serializer_class = RatingSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Rating.objects.filter(book_slug = self.kwargs['book_pk'])
+        return Rating.objects.filter(book__slug = self.kwargs['book_pk'])
     
     def get_serializer_context(self):
         user_id = self.request.user.id 
-        book_slug = self.kwargs['book_slug']
+        book_slug = self.kwargs['book_pk']
         return {'user_id': user_id, 'book_slug': book_slug}

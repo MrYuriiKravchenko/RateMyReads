@@ -11,7 +11,7 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer):
-    genre = GenreSerializer(many=True)
+    genre = serializers.PrimaryKeyRelatedField(many=True, queryset=Genre.objects.all())
 
     class Meta:
         model = Book 
