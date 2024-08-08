@@ -4,6 +4,7 @@ import AboutView from '../views/AboutView.vue'
 import SignUp from '../views/SignUp.vue'
 import LogIn from '../views/LogIn.vue'
 import Books from '../views/Books'
+import Book from '../views/Book'
 import MyAccount from '../views/dashboard/MyAccount'
 
 
@@ -38,7 +39,13 @@ const routes = [
     name: 'Books',
     component: Books
   },
+  {
+    path: '/books/:slug',
+    name: 'Book',
+    component: Book
+  },
 ]
+
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
